@@ -81,7 +81,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
 
       stack_t<8 * sizeof (size_t), I> stack;
 
-      I * lo = (I *)base_ptr;
+      I * lo = &ord[0];
       I * hi = &lo[total_elems - 1];
       stack.push (nullptr, nullptr);
       while (stack.size ())
@@ -146,7 +146,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
         }
     }
   {
-    char *const end_ptr = &base_ptr[size * (total_elems - 1)];
+    char * const end_ptr = &base_ptr[size * (total_elems - 1)];
     char *tmp_ptr = base_ptr;
     char *thresh = std::min(end_ptr, base_ptr + max_thresh);
     char *run_ptr;
