@@ -2,7 +2,7 @@
 
 set -x
 
-\rm *.o *.x
+\rm *.o *.x vec1.txt vec2.txt
 
 cc -c -g qsort.c
 g++ -g -std=c++11 main.cc qsort.o -o main.x

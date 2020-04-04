@@ -9,7 +9,7 @@
 
 
 template <typename V, typename C>
-void my_quicksort2 (typename V::iterator & b, typename V::iterator & e, C cmp)
+void my_quicksort2 (typename V::iterator b, typename V::iterator e, C cmp)
 {
   using itt = typename V::iterator;
   
