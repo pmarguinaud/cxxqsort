@@ -19,12 +19,6 @@
 
 #define MAX_THRESH  4
 
-typedef struct
-  {
-    char *lo;
-    char *hi;
-  } stack_node;
-
 #define STACK_SIZE        (CHAR_BIT * sizeof (size_t))
 #define PUSH(low, high)        ((void) ((top->lo = (low)), (top->hi = (high)), ++top))
 #define        POP(low, high)        ((void) (--top, (low = top->lo), (high = top->hi)))
@@ -34,6 +28,11 @@ typedef struct
 template <typename I, typename C>
 void my_quicksort2 (std::vector<I> & ord, C cmp_)
 {
+   struct stack_node
+   {
+     char *lo;
+     char *hi;
+   };
 
   if (ord.size () == 0)
     return;
@@ -118,11 +117,10 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
             }
         }
     }
-#define min(x, y) ((x) < (y) ? (x) : (y))
   {
     char *const end_ptr = &base_ptr[size * (total_elems - 1)];
     char *tmp_ptr = base_ptr;
-    char *thresh = min(end_ptr, base_ptr + max_thresh);
+    char *thresh = std::min(end_ptr, base_ptr + max_thresh);
     char *run_ptr;
     for (run_ptr = tmp_ptr + size; run_ptr <= thresh; run_ptr += size)
       if (cmp ((void *) run_ptr, (void *) tmp_ptr) < 0)
