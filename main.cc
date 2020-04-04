@@ -135,26 +135,26 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
         }
     }
   {
-    char * const end_ptr = &base_ptr[size * (total_elems - 1)];
-    char *tmp_ptr = base_ptr;
-    char *thresh = std::min(end_ptr, base_ptr + max_thresh);
-    char *run_ptr;
-    for (run_ptr = tmp_ptr + size; run_ptr <= thresh; run_ptr += size)
+    I * const end_ptr = &ord[total_elems-1];
+    I * tmp_ptr = &ord[0];
+    I * thresh = std::min (end_ptr, &ord[0] + MAX_THRESH);
+    I * run_ptr;
+    for (run_ptr = tmp_ptr + 1; run_ptr <= thresh; run_ptr += 1)
       if (cmp (run_ptr, tmp_ptr) < 0)
         tmp_ptr = run_ptr;
-    if (tmp_ptr != base_ptr)
-      std::swap (*((I *)tmp_ptr), *((I *)base_ptr));
-    run_ptr = base_ptr + size;
-    while ((run_ptr += size) <= end_ptr)
+    if (tmp_ptr != &ord[0])
+      std::swap (*tmp_ptr, ord[0]);
+    run_ptr = &ord[0] + 1;
+    while ((run_ptr += 1) <= end_ptr)
       {
-        tmp_ptr = run_ptr - size;
+        tmp_ptr = run_ptr - 1;
         while (cmp (run_ptr, tmp_ptr) < 0)
-          tmp_ptr -= size;
-        tmp_ptr += size;
+          tmp_ptr -= 1;
+        tmp_ptr += 1;
         if (tmp_ptr != run_ptr)
           {
-            I * x1 = (I *)tmp_ptr;
-            I * x2 = (I *)run_ptr;
+            I * x1 = tmp_ptr;
+            I * x2 = run_ptr;
            
             I v2 = *x2;
            
