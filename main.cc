@@ -14,40 +14,15 @@ void my_quicksort2 (I b, I e, C cmp)
   class stack_t
   {
   public:
-    stack_t () 
-    {
-      top = &arr[0];
-    }
-    void push (I lo, I hi)
-    {
-      top->lo = lo; 
-      top->hi = hi; 
-      top++;
-    }
-    void pop (I & lo, I & hi)
-    {
-      top--;
-      lo = top->lo;
-      hi = top->hi;
-    }
-    bool empty () const
-    {
-      return arr >= top;
-    }
-    size_t size () const
-    {
-      return top - &arr[0];
-    }
+    stack_t () { top = &arr[0]; }
+    void push (I lo, I hi) { top->lo = lo; top->hi = hi; top++; }
+    void pop (I & lo, I & hi) { top--; lo = top->lo; hi = top->hi; }
+    size_t size () const { return top - &arr[0]; }
   private:
-    struct node_t
-    {
-      I lo;
-      I hi;
-    };
+    struct node_t { I lo; I hi; };
     node_t arr[64];
     node_t * top;
   };
-
 
   const int max = 4;
 
