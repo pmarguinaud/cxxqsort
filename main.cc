@@ -8,6 +8,8 @@
 
 void SWAP (void * a, void * b, size_t size)
 {
+if (0)
+{
   char *__a = (char *)(a), *__b = (char *)(b);                
   do                                                          
     {                                                         
@@ -16,6 +18,13 @@ void SWAP (void * a, void * b, size_t size)
       *__b++ = __tmp;                                         
     } 
   while (--size > 0);                                   
+}else{
+  int * __a = (int *)a; int * __b = (int *)b;
+  std::swap (*__a, *__b);
+//int c = *__a;
+//*__a = *__b;
+//*__b = c;
+}
 }
 
 
