@@ -9,9 +9,9 @@
 
 
 template <typename V, typename C>
-void my_quicksort2 (typename V::iterator b, typename V::iterator e, C cmp)
+void my_quicksort2 (V b, V e, C cmp)
 {
-  using itt = typename V::iterator;
+  using itt = V;
   
 
   class stack_t
@@ -199,7 +199,7 @@ int main (int argc, char * argv[])
 
   auto cmp = [&] (int a, int b) { return compare (&a, &b); };
 
-  my_quicksort2<std::vector<int>,decltype (cmp)> (vec2.begin (), vec2.end (), cmp);
+  my_quicksort2 (vec2.begin (), vec2.end (), cmp);
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
