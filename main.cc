@@ -136,9 +136,9 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
   {
     I * const end = &ord[total_elems-1];
     I * tmp = &ord[0];
-    I * thresh = std::min (end, &ord[0] + MAX_THRESH);
+    I * thr = std::min (end, &ord[0] + MAX_THRESH);
     I * run;
-    for (run = tmp + 1; run <= thresh; run++)
+    for (run = tmp + 1; run <= thr; run++)
       if (cmp (run, tmp) < 0)
         tmp = run;
     if (tmp != &ord[0])
@@ -203,6 +203,7 @@ int main (int argc, char * argv[])
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
+
 
   return 0;
 }
