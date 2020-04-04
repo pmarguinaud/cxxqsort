@@ -88,13 +88,16 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           I * right_ptr;
           I * mid = lo + ((hi - lo) >> 1);
           if (cmp (mid, lo) < 0)
-            SWAP (mid, lo, size);
+//          SWAP (mid, lo, size);
+            std::swap (*mid, *lo);
           if (cmp (hi, mid) < 0)
-            SWAP (mid, hi, size);
+//          SWAP (mid, hi, size);
+            std::swap (*mid, *hi);
           else
             goto jump_over;
           if (cmp (mid, lo) < 0)
-            SWAP (mid, lo, size);
+//          SWAP (mid, lo, size);
+            std::swap (*mid, *lo);
         jump_over:;
           left_ptr  = lo + 1;
           right_ptr = hi - 1;
@@ -106,7 +109,8 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                 right_ptr -= 1;
               if (left_ptr < right_ptr)
                 {
-                  SWAP (left_ptr, right_ptr, size);
+//                SWAP (left_ptr, right_ptr, size);
+                  std::swap (*left_ptr, *right_ptr);
                   if (mid == left_ptr)
                     mid = right_ptr;
                   else if (mid == right_ptr)
@@ -152,7 +156,8 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
       if (cmp (run_ptr, tmp_ptr) < 0)
         tmp_ptr = run_ptr;
     if (tmp_ptr != base_ptr)
-      SWAP ((I *)tmp_ptr, (I *)base_ptr, size);
+//    SWAP ((I *)tmp_ptr, (I *)base_ptr, size);
+      std::swap (*((I *)tmp_ptr), *((I *)base_ptr));
     run_ptr = base_ptr + size;
     while ((run_ptr += size) <= end_ptr)
       {
