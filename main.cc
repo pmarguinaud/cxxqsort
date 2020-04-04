@@ -13,17 +13,18 @@ template <size_t N, typename T>
 class stack_t
 {
 public:
+  using itt = typename std::vector<T>::iterator;
   stack_t () 
   {
     top = &arr[0];
   }
-  void push (T * lo, T * hi)
+  void push (itt lo, itt hi)
   {
     top->lo = lo; 
     top->hi = hi; 
     top++;
   }
-  void pop (T * & lo, T * & hi)
+  void pop (itt & lo, itt & hi)
   {
     top--;
     lo = top->lo;
@@ -40,10 +41,8 @@ public:
 private:
   struct node_t
   {
-    T * lo;
-    T * hi;
-//  std::vector<T>::iterator lo;
-//  std::vector<T>::iterator hi;
+    itt lo;
+    itt hi;
   };
   node_t arr[N];
   node_t * top;
@@ -52,15 +51,12 @@ private:
 template <typename I, typename C>
 void my_quicksort2 (std::vector<I> & ord, C cmp_)
 {
+  using itt = typename std::vector<I>::iterator;
+
   if (ord.size () == 0)
     return;
 
-  auto cmp = [&cmp_] (const void * _a, const void * _b)
-             {
-               I a = *((I *)_a);
-               I b = *((I *)_b);
-               return cmp_ (a, b);
-             };
+  auto cmp = cmp_;
 
   size_t total_elems = ord.size ();
 
@@ -69,30 +65,30 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
 
       stack_t<8 * sizeof (size_t), I> stack;
 
-      I * lo = &ord[0];
-      I * hi = &lo[total_elems - 1];
-      stack.push (nullptr, nullptr);
+      itt lo = ord.begin ();
+      itt hi = ord.end () - 1;
+      stack.push (ord.end (), ord.end ());
       while (stack.size ())
         {
-          I * le;
-          I * right_ptr;
-          I * mid = lo + (hi - lo) / 2;
-          if (cmp (mid, lo) < 0)
+          itt le;
+          itt right_ptr;
+          itt mid = lo + (hi - lo) / 2;
+          if (cmp (*mid, *lo) < 0)
             std::swap (*mid, *lo);
-          if (cmp (hi, mid) < 0)
+          if (cmp (*hi, *mid) < 0)
             std::swap (*mid, *hi);
           else
             goto jump_over;
-          if (cmp (mid, lo) < 0)
+          if (cmp (*mid, *lo) < 0)
             std::swap (*mid, *lo);
         jump_over:;
           le  = lo + 1;
           right_ptr = hi - 1;
           do
             {
-              while (cmp (le, mid) < 0)
+              while (cmp (*le, *mid) < 0)
                 le++;
-              while (cmp (mid, right_ptr) < 0)
+              while (cmp (*mid, *right_ptr) < 0)
                 right_ptr--;
               if (le < right_ptr)
                 {
@@ -134,33 +130,34 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
         }
     }
   {
-    I * const end = &ord[total_elems-1];
-    I * tmp = &ord[0];
-    I * thr = std::min (end, &ord[0] + MAX_THRESH);
-    I * run;
+    itt end = ord.end () - 1;
+    itt tmp = ord.begin ();
+    itt thr = std::min (end, ord.begin () + MAX_THRESH);
+    itt run;
     for (run = tmp + 1; run <= thr; run++)
-      if (cmp (run, tmp) < 0)
+      if (cmp (*run, *tmp) < 0)
         tmp = run;
-    if (tmp != &ord[0])
+    if (tmp != ord.begin ())
       std::swap (*tmp, ord[0]);
-    run = &ord[0] + 1;
+    run = ord.begin () + 1;
     while (++run <= end)
       {
         tmp = run - 1;
-        while (cmp (run, tmp) < 0)
+        while (cmp (*run, *tmp) < 0)
           tmp--;
         tmp++;
         if (tmp != run)
           {
-            I * x1 = tmp;
-            I * x2 = run;
+            itt x1 = tmp;
+            itt x2 = run;
             I v2 = *x2;
-            for (I * x = x2; x > x1; x--)
+            for (itt x = x2; x > x1; x--)
               *x = *(x - 1);
             *x1 = v2;
           }
       }
   }
+
 }
 
 
@@ -203,7 +200,6 @@ int main (int argc, char * argv[])
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
-
 
   return 0;
 }
