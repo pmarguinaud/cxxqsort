@@ -161,9 +161,13 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                 char c = *trav;
                 char *hi, *lo;
                 hi = lo = trav;
-                for (; (lo -= size) >= tmp_ptr; hi = lo)
+                while (1)
                   {
+                    lo = lo - size;
+                    if (lo < tmp_ptr)
+                      break;
                     *hi = *lo;
+                    hi = lo;
                   }
                 *hi = c;
               }
