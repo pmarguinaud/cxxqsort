@@ -92,9 +92,9 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           do
             {
               while (cmp (left_ptr, mid) < 0)
-                left_ptr += 1;
+                left_ptr++;
               while (cmp (mid, right_ptr) < 0)
-                right_ptr -= 1;
+                right_ptr--;
               if (left_ptr < right_ptr)
                 {
                   std::swap (*left_ptr, *right_ptr);
@@ -102,25 +102,25 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                     mid = right_ptr;
                   else if (mid == right_ptr)
                     mid = left_ptr;
-                  left_ptr += 1;
-                  right_ptr -= 1;
+                  left_ptr++;
+                  right_ptr--;
                 }
               else if (left_ptr == right_ptr)
                 {
-                  left_ptr += 1;
-                  right_ptr -= 1;
+                  left_ptr++;
+                  right_ptr--;
                   break;
                 }
             }
           while (left_ptr <= right_ptr);
-          if ((size_t) (right_ptr - lo) <= MAX_THRESH)
+          if ((right_ptr - lo) <= MAX_THRESH)
             {
-              if ((size_t) (hi - left_ptr) <= MAX_THRESH)
+              if ((hi - left_ptr) <= MAX_THRESH)
                 stack.pop (lo, hi);
               else
                 lo = left_ptr;
             }
-          else if ((size_t) (hi - left_ptr) <= MAX_THRESH)
+          else if ((hi - left_ptr) <= MAX_THRESH)
             hi = right_ptr;
           else if ((right_ptr - lo) > (hi - left_ptr))
             {
@@ -139,7 +139,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
     I * tmp_ptr = &ord[0];
     I * thresh = std::min (end_ptr, &ord[0] + MAX_THRESH);
     I * run_ptr;
-    for (run_ptr = tmp_ptr + 1; run_ptr <= thresh; run_ptr += 1)
+    for (run_ptr = tmp_ptr + 1; run_ptr <= thresh; run_ptr++)
       if (cmp (run_ptr, tmp_ptr) < 0)
         tmp_ptr = run_ptr;
     if (tmp_ptr != &ord[0])
@@ -149,18 +149,15 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
       {
         tmp_ptr = run_ptr - 1;
         while (cmp (run_ptr, tmp_ptr) < 0)
-          tmp_ptr -= 1;
-        tmp_ptr += 1;
+          tmp_ptr--;
+        tmp_ptr++;
         if (tmp_ptr != run_ptr)
           {
             I * x1 = tmp_ptr;
             I * x2 = run_ptr;
-           
             I v2 = *x2;
-           
             for (I * x = x2; x > x1; x--)
               *x = *(x - 1);
-           
             *x1 = v2;
           }
       }
