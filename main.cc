@@ -116,8 +116,7 @@ jump_over:
       tmp++;
       if (tmp != run)
         {
-          I x1 = tmp;
-          I x2 = run;
+          I x1 = tmp, x2 = run;
           typename I::value_type v2 = *x2;
           for (I x = x2; x > x1; x--)
             *x = *(x - 1);
