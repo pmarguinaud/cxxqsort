@@ -6,7 +6,6 @@
 #include <utility>
 
 
-#define MAX_THRESH  4
 
 
 template <size_t N, typename T>
@@ -49,18 +48,16 @@ private:
 };
 
 template <typename I, typename C>
-void my_quicksort2 (std::vector<I> & ord, C cmp_)
+void my_quicksort2 (std::vector<I> & ord, C cmp)
 {
   using itt = typename std::vector<I>::iterator;
+
+  const int max = 4;
 
   if (ord.size () == 0)
     return;
 
-  auto cmp = cmp_;
-
-  size_t total_elems = ord.size ();
-
-  if (ord.size () > MAX_THRESH)
+  if (ord.size () > max)
     {
 
       stack_t<8 * sizeof (size_t), I> stack;
@@ -108,14 +105,14 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                 }
             }
           while (le <= ri);
-          if ((ri - lo) <= MAX_THRESH)
+          if ((ri - lo) <= max)
             {
-              if ((hi - le) <= MAX_THRESH)
+              if ((hi - le) <= max)
                 stack.pop (lo, hi);
               else
                 lo = le;
             }
-          else if ((hi - le) <= MAX_THRESH)
+          else if ((hi - le) <= max)
             hi = ri;
           else if ((ri - lo) > (hi - le))
             {
@@ -132,7 +129,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
   {
     itt end = ord.end () - 1;
     itt tmp = ord.begin ();
-    itt thr = std::min (end, ord.begin () + MAX_THRESH);
+    itt thr = std::min (end, ord.begin () + max);
     itt run;
     for (run = tmp + 1; run <= thr; run++)
       if (cmp (*run, *tmp) < 0)
