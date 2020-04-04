@@ -20,6 +20,45 @@
 #define MAX_THRESH  4
 
 
+struct stack_node
+{
+  char *lo;
+  char *hi;
+};
+
+template <size_t N>
+class stack_t
+{
+public:
+  stack_t () 
+  {
+    top = &stack[0];
+  }
+  void push (char * lo, char * hi)
+  {
+    top->lo = lo; 
+    top->hi = hi; 
+    top++;
+  }
+  void pop (char * & lo, char * & hi)
+  {
+    top--;
+    lo = top->lo;
+    hi = top->hi;
+  }
+  bool empty () const
+  {
+    return stack >= top;
+  }
+  size_t size () const
+  {
+    return top - &stack[0];
+  }
+private:
+  stack_node stack[N];
+  stack_node * top;
+};
+
 template <typename I, typename C>
 void my_quicksort2 (std::vector<I> & ord, C cmp_)
 {
@@ -40,23 +79,24 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
   const size_t max_thresh = MAX_THRESH * size;
   if (ord.size () > MAX_THRESH)
     {
-   struct stack_node
-   {
-     char *lo;
-     char *hi;
-   };
 
+      stack_t<8 * sizeof (size_t)> stack1;
+
+#ifdef UNDEF
 #define STACK_SIZE        (CHAR_BIT * sizeof (size_t))
 #define PUSH(low, high)        ((void) ((top->lo = (low)), (top->hi = (high)), ++top))
 #define        POP(low, high)        ((void) (--top, (low = top->lo), (high = top->hi)))
 #define        STACK_NOT_EMPTY        (stack < top)
+#endif
 
       char *lo = base_ptr;
       char *hi = &lo[size * (total_elems - 1)];
-      stack_node stack[STACK_SIZE];
-      stack_node *top = stack;
-      PUSH (NULL, NULL);
-      while (STACK_NOT_EMPTY)
+//    stack_node stack[STACK_SIZE];
+//    stack_node *top = stack;
+//    PUSH (NULL, NULL);
+      stack1.push (nullptr, nullptr);
+//    while (STACK_NOT_EMPTY)
+      while (stack1.size ())
         {
           char *left_ptr;
           char *right_ptr;
@@ -99,7 +139,8 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           if ((size_t) (right_ptr - lo) <= max_thresh)
             {
               if ((size_t) (hi - left_ptr) <= max_thresh)
-                POP (lo, hi);
+//              POP (lo, hi);
+                stack1.pop (lo, hi);
               else
                 lo = left_ptr;
             }
@@ -107,12 +148,14 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
             hi = right_ptr;
           else if ((right_ptr - lo) > (hi - left_ptr))
             {
-              PUSH (lo, right_ptr);
+//            PUSH (lo, right_ptr);
+              stack1.push (lo, right_ptr);
               lo = left_ptr;
             }
           else
             {
-              PUSH (left_ptr, hi);
+//            PUSH (left_ptr, hi);
+              stack1.push (left_ptr, hi);
               hi = right_ptr;
             }
         }
