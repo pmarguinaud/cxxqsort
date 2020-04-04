@@ -42,6 +42,8 @@ private:
   {
     T * lo;
     T * hi;
+//  std::vector<T>::iterator lo;
+//  std::vector<T>::iterator hi;
   };
   node_t arr[N];
   node_t * top;
@@ -61,10 +63,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
              };
 
   size_t total_elems = ord.size ();
-  size_t size = sizeof (ord[0]);
 
-  char *base_ptr = (char *) &ord[0];
-  const size_t max_thresh = MAX_THRESH * size;
   if (ord.size () > MAX_THRESH)
     {
 
@@ -75,7 +74,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
       stack.push (nullptr, nullptr);
       while (stack.size ())
         {
-          I * left_ptr;
+          I * le;
           I * right_ptr;
           I * mid = lo + (hi - lo) / 2;
           if (cmp (mid, lo) < 0)
@@ -87,49 +86,49 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           if (cmp (mid, lo) < 0)
             std::swap (*mid, *lo);
         jump_over:;
-          left_ptr  = lo + 1;
+          le  = lo + 1;
           right_ptr = hi - 1;
           do
             {
-              while (cmp (left_ptr, mid) < 0)
-                left_ptr++;
+              while (cmp (le, mid) < 0)
+                le++;
               while (cmp (mid, right_ptr) < 0)
                 right_ptr--;
-              if (left_ptr < right_ptr)
+              if (le < right_ptr)
                 {
-                  std::swap (*left_ptr, *right_ptr);
-                  if (mid == left_ptr)
+                  std::swap (*le, *right_ptr);
+                  if (mid == le)
                     mid = right_ptr;
                   else if (mid == right_ptr)
-                    mid = left_ptr;
-                  left_ptr++;
+                    mid = le;
+                  le++;
                   right_ptr--;
                 }
-              else if (left_ptr == right_ptr)
+              else if (le == right_ptr)
                 {
-                  left_ptr++;
+                  le++;
                   right_ptr--;
                   break;
                 }
             }
-          while (left_ptr <= right_ptr);
+          while (le <= right_ptr);
           if ((right_ptr - lo) <= MAX_THRESH)
             {
-              if ((hi - left_ptr) <= MAX_THRESH)
+              if ((hi - le) <= MAX_THRESH)
                 stack.pop (lo, hi);
               else
-                lo = left_ptr;
+                lo = le;
             }
-          else if ((hi - left_ptr) <= MAX_THRESH)
+          else if ((hi - le) <= MAX_THRESH)
             hi = right_ptr;
-          else if ((right_ptr - lo) > (hi - left_ptr))
+          else if ((right_ptr - lo) > (hi - le))
             {
               stack.push (lo, right_ptr);
-              lo = left_ptr;
+              lo = le;
             }
           else
             {
-              stack.push (left_ptr, hi);
+              stack.push (le, hi);
               hi = right_ptr;
             }
         }
@@ -204,7 +203,6 @@ int main (int argc, char * argv[])
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
-
 
   return 0;
 }
