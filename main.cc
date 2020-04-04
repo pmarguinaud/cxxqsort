@@ -199,7 +199,7 @@ int main (int argc, char * argv[])
 
   auto cmp = [&] (int a, int b) { return compare (&a, &b); };
 
-  my_quicksort2<std::vector<int>,decltype (cmp)> (b2, e2, cmp);
+  my_quicksort2<std::vector<int>,decltype (cmp)> (vec2.begin (), vec2.end (), cmp);
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
