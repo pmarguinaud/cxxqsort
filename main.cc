@@ -3,19 +3,21 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
+#include <utility>
 
-#define SWAP(a, b, size)                                          \
-  do                                                              \
-    {                                                             \
-      size_t __size = (size);                                     \
-      char *__a = (char *)(a), *__b = (char *)(b);                \
-      do                                                          \
-        {                                                         \
-          char __tmp = *__a;                                      \
-          *__a++ = *__b;                                          \
-          *__b++ = __tmp;                                         \
-        } while (--__size > 0);                                   \
-    } while (0)
+
+void SWAP (void * a, void * b, size_t size)
+{
+  char *__a = (char *)(a), *__b = (char *)(b);                
+  do                                                          
+    {                                                         
+      char __tmp = *__a;                                      
+      *__a++ = *__b;                                          
+      *__b++ = __tmp;                                         
+    } 
+  while (--size > 0);                                   
+}
+
 
 #define MAX_THRESH  4
 
