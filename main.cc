@@ -4,23 +4,23 @@
 #include <stdio.h>
 #include <vector>
 
-#define SWAP(a, b, size)                                                      \
-  do                                                                              \
-    {                                                                              \
-      size_t __size = (size);                                                      \
-      char *__a = (a), *__b = (b);                                              \
-      do                                                                      \
-        {                                                                      \
-          char __tmp = *__a;                                                      \
-          *__a++ = *__b;                                                      \
-          *__b++ = __tmp;                                                      \
-        } while (--__size > 0);                                                      \
+#define SWAP(a, b, size)                                          \
+  do                                                              \
+    {                                                             \
+      size_t __size = (size);                                     \
+      char *__a = (char *)(a), *__b = (char *)(b);                \
+      do                                                          \
+        {                                                         \
+          char __tmp = *__a;                                      \
+          *__a++ = *__b;                                          \
+          *__b++ = __tmp;                                         \
+        } while (--__size > 0);                                   \
     } while (0)
 
 #define MAX_THRESH  4
 
 
-template <size_t N>
+template <size_t N, typename T>
 class stack_t
 {
 public:
@@ -28,13 +28,13 @@ public:
   {
     top = &arr[0];
   }
-  void push (char * lo, char * hi)
+  void push (T * lo, T * hi)
   {
     top->lo = lo; 
     top->hi = hi; 
     top++;
   }
-  void pop (char * & lo, char * & hi)
+  void pop (T * & lo, T * & hi)
   {
     top--;
     lo = top->lo;
@@ -51,8 +51,8 @@ public:
 private:
   struct node_t
   {
-    char * lo;
-    char * hi;
+    T * lo;
+    T * hi;
   };
   node_t arr[N];
   node_t * top;
@@ -79,16 +79,16 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
   if (ord.size () > MAX_THRESH)
     {
 
-      stack_t<8 * sizeof (size_t)> stack;
+      stack_t<8 * sizeof (size_t), I> stack;
 
-      char *lo = base_ptr;
-      char *hi = &lo[size * (total_elems - 1)];
+      I * lo = (I *)base_ptr;
+      I * hi = &lo[total_elems - 1];
       stack.push (nullptr, nullptr);
       while (stack.size ())
         {
-          char *left_ptr;
-          char *right_ptr;
-          char *mid = lo + size * ((hi - lo) / size >> 1);
+          I * left_ptr;
+          I * right_ptr;
+          I * mid = lo + ((hi - lo) >> 1);
           if (cmp (mid, lo) < 0)
             SWAP (mid, lo, size);
           if (cmp (hi, mid) < 0)
@@ -98,14 +98,14 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           if (cmp (mid, lo) < 0)
             SWAP (mid, lo, size);
         jump_over:;
-          left_ptr  = lo + size;
-          right_ptr = hi - size;
+          left_ptr  = lo + 1;
+          right_ptr = hi - 1;
           do
             {
               while (cmp (left_ptr, mid) < 0)
-                left_ptr += size;
+                left_ptr += 1;
               while (cmp (mid, right_ptr) < 0)
-                right_ptr -= size;
+                right_ptr -= 1;
               if (left_ptr < right_ptr)
                 {
                   SWAP (left_ptr, right_ptr, size);
@@ -113,25 +113,25 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                     mid = right_ptr;
                   else if (mid == right_ptr)
                     mid = left_ptr;
-                  left_ptr += size;
-                  right_ptr -= size;
+                  left_ptr += 1;
+                  right_ptr -= 1;
                 }
               else if (left_ptr == right_ptr)
                 {
-                  left_ptr += size;
-                  right_ptr -= size;
+                  left_ptr += 1;
+                  right_ptr -= 1;
                   break;
                 }
             }
           while (left_ptr <= right_ptr);
-          if ((size_t) (right_ptr - lo) <= max_thresh)
+          if ((size_t) (right_ptr - lo) <= MAX_THRESH)
             {
-              if ((size_t) (hi - left_ptr) <= max_thresh)
+              if ((size_t) (hi - left_ptr) <= MAX_THRESH)
                 stack.pop (lo, hi);
               else
                 lo = left_ptr;
             }
-          else if ((size_t) (hi - left_ptr) <= max_thresh)
+          else if ((size_t) (hi - left_ptr) <= MAX_THRESH)
             hi = right_ptr;
           else if ((right_ptr - lo) > (hi - left_ptr))
             {
