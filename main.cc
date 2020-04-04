@@ -153,63 +153,15 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
         tmp_ptr += size;
         if (tmp_ptr != run_ptr)
           {
-
-bool dbg = false;
-
-if (dbg){
-printf ("->");
-for (I * k = (I *)tmp_ptr; k <= (I *)run_ptr; k++)
-  printf (" %8d", *k);
-printf ("\n");
-}
-
-if (0){
-            char *trav;
-            trav = run_ptr + size;
-            while (--trav >= run_ptr)
-              {
-                char c = *trav;
-                char *hi, *lo;
-                hi = lo = trav;
-                while (1)
-                  {
-                    lo = lo - size;
-                    if (lo < tmp_ptr)
-                      break;
-                    *hi = *lo;
-                    hi = lo;
-                  }
-                *hi = c;
-              }
-
-}else{
-
-  I * x1 = (I *)tmp_ptr;
-  I * x2 = (I *)run_ptr;
-
-  I v2 = *x2;
-
-  for (I * x = x2; x > x1; x--)
-    *x = *(x - 1);
-
-  *x1 = v2;
-
-
-}
-
-if(dbg){
-printf ("<-");
-for (I * k = (I *)tmp_ptr; k <= (I *)run_ptr; k++)
-  printf (" %8d", *k);
-printf ("\n");
-
-printf ("\n");
-
-static int count = 0;
-
-if (count++ > 100) exit (0);
-}
-
+            I * x1 = (I *)tmp_ptr;
+            I * x2 = (I *)run_ptr;
+           
+            I v2 = *x2;
+           
+            for (I * x = x2; x > x1; x--)
+              *x = *(x - 1);
+           
+            *x1 = v2;
           }
       }
   }
