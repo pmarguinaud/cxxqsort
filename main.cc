@@ -71,7 +71,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
       while (stack.size ())
         {
           itt le;
-          itt right_ptr;
+          itt ri;
           itt mid = lo + (hi - lo) / 2;
           if (cmp (*mid, *lo) < 0)
             std::swap (*mid, *lo);
@@ -83,32 +83,32 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
             std::swap (*mid, *lo);
         jump_over:;
           le  = lo + 1;
-          right_ptr = hi - 1;
+          ri = hi - 1;
           do
             {
               while (cmp (*le, *mid) < 0)
                 le++;
-              while (cmp (*mid, *right_ptr) < 0)
-                right_ptr--;
-              if (le < right_ptr)
+              while (cmp (*mid, *ri) < 0)
+                ri--;
+              if (le < ri)
                 {
-                  std::swap (*le, *right_ptr);
+                  std::swap (*le, *ri);
                   if (mid == le)
-                    mid = right_ptr;
-                  else if (mid == right_ptr)
+                    mid = ri;
+                  else if (mid == ri)
                     mid = le;
                   le++;
-                  right_ptr--;
+                  ri--;
                 }
-              else if (le == right_ptr)
+              else if (le == ri)
                 {
                   le++;
-                  right_ptr--;
+                  ri--;
                   break;
                 }
             }
-          while (le <= right_ptr);
-          if ((right_ptr - lo) <= MAX_THRESH)
+          while (le <= ri);
+          if ((ri - lo) <= MAX_THRESH)
             {
               if ((hi - le) <= MAX_THRESH)
                 stack.pop (lo, hi);
@@ -116,16 +116,16 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                 lo = le;
             }
           else if ((hi - le) <= MAX_THRESH)
-            hi = right_ptr;
-          else if ((right_ptr - lo) > (hi - le))
+            hi = ri;
+          else if ((ri - lo) > (hi - le))
             {
-              stack.push (lo, right_ptr);
+              stack.push (lo, ri);
               lo = le;
             }
           else
             {
               stack.push (le, hi);
-              hi = right_ptr;
+              hi = ri;
             }
         }
     }
