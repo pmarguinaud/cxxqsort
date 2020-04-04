@@ -143,7 +143,6 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
       if (cmp (run_ptr, tmp_ptr) < 0)
         tmp_ptr = run_ptr;
     if (tmp_ptr != base_ptr)
-//    SWAP ((I *)tmp_ptr, (I *)base_ptr, size);
       std::swap (*((I *)tmp_ptr), *((I *)base_ptr));
     run_ptr = base_ptr + size;
     while ((run_ptr += size) <= end_ptr)
