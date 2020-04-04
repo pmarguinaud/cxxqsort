@@ -143,7 +143,7 @@ static void pr (const std::vector<int> & vec, const char * file)
 {
   FILE * fp = fopen (file, "w");
   for (int i = 0; i < vec.size (); i++)  
-    fprintf (fp, "%8d\n", vec[i]);
+    fprintf (fp, "%12d\n", vec[i]);
   fclose (fp);
 }
 
