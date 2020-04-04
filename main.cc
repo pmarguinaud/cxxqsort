@@ -40,14 +40,14 @@ void my_quicksort2 (I b, I e, C cmp)
         {
           I le, ri, mi = lo + (hi - lo) / 2;
 
-          if (cmp (*mi, *lo) < 0)
+          if (cmp (*mi, *lo))
             std::swap (*mi, *lo);
-          if (cmp (*hi, *mi) < 0)
+          if (cmp (*hi, *mi))
             std::swap (*mi, *hi);
           else
             goto jump_over;
 
-          if (cmp (*mi, *lo) < 0)
+          if (cmp (*mi, *lo))
             std::swap (*mi, *lo);
 
 jump_over:
@@ -56,8 +56,8 @@ jump_over:
 
           do
             {
-              while (cmp (*le, *mi) < 0) le++;
-              while (cmp (*mi, *ri) < 0) ri--;
+              while (cmp (*le, *mi)) le++;
+              while (cmp (*mi, *ri)) ri--;
               if (le < ri)
                 {
                   std::swap (*le, *ri);
@@ -103,7 +103,7 @@ jump_over:
 
   I end = e - 1, tmp = b, thr = std::min (end, b + max), run;
   for (run = tmp + 1; run <= thr; run++)
-    if (cmp (*run, *tmp) < 0)
+    if (cmp (*run, *tmp))
       tmp = run;
   if (tmp != b)
     std::swap (*tmp, *b);
@@ -111,7 +111,7 @@ jump_over:
   while (++run <= end)
     {
       tmp = run - 1;
-      while (cmp (*run, *tmp) < 0)
+      while (cmp (*run, *tmp))
         tmp--;
       tmp++;
       if (tmp != run)
@@ -166,7 +166,7 @@ int main (int argc, char * argv[])
   std::vector<int>::iterator b2 = vec2.begin ();
   std::vector<int>::iterator e2 = vec2.end ();
 
-  auto cmp = [&] (int a, int b) { return compare (&a, &b); };
+  auto cmp = [] (int a, int b) { return a < b; };
 
   my_quicksort2 (vec2.begin (), vec2.end (), cmp);
 
