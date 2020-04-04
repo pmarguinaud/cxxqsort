@@ -35,26 +35,29 @@ void my_quicksort2 (I b, I e, C cmp)
 
       I lo = b, hi = e - 1;
       stack.push (e, e);
+
       while (stack.size ())
         {
           I le, ri, mi = lo + (hi - lo) / 2;
+
           if (cmp (*mi, *lo) < 0)
             std::swap (*mi, *lo);
           if (cmp (*hi, *mi) < 0)
             std::swap (*mi, *hi);
           else
             goto jump_over;
+
           if (cmp (*mi, *lo) < 0)
             std::swap (*mi, *lo);
-        jump_over:;
-          le  = lo + 1;
+
+jump_over:
+          le = lo + 1;
           ri = hi - 1;
+
           do
             {
-              while (cmp (*le, *mi) < 0)
-                le++;
-              while (cmp (*mi, *ri) < 0)
-                ri--;
+              while (cmp (*le, *mi) < 0) le++;
+              while (cmp (*mi, *ri) < 0) ri--;
               if (le < ri)
                 {
                   std::swap (*le, *ri);
@@ -73,6 +76,7 @@ void my_quicksort2 (I b, I e, C cmp)
                 }
             }
           while (le <= ri);
+
           if ((ri - lo) <= max)
             {
               if ((hi - le) <= max)
@@ -81,7 +85,9 @@ void my_quicksort2 (I b, I e, C cmp)
                 lo = le;
             }
           else if ((hi - le) <= max)
-            hi = ri;
+            {
+              hi = ri;
+            }
           else if ((ri - lo) > (hi - le))
             {
               stack.push (lo, ri);
@@ -94,34 +100,30 @@ void my_quicksort2 (I b, I e, C cmp)
             }
         }
     }
-  {
-    I end = e - 1;
-    I tmp = b;
-    I thr = std::min (end, b + max);
-    I run;
-    for (run = tmp + 1; run <= thr; run++)
-      if (cmp (*run, *tmp) < 0)
-        tmp = run;
-    if (tmp != b)
-      std::swap (*tmp, *b);
-    run = b + 1;
-    while (++run <= end)
-      {
-        tmp = run - 1;
-        while (cmp (*run, *tmp) < 0)
-          tmp--;
-        tmp++;
-        if (tmp != run)
-          {
-            I x1 = tmp;
-            I x2 = run;
-            typename I::value_type v2 = *x2;
-            for (I x = x2; x > x1; x--)
-              *x = *(x - 1);
-            *x1 = v2;
-          }
-      }
-  }
+
+  I end = e - 1, tmp = b, thr = std::min (end, b + max), run;
+  for (run = tmp + 1; run <= thr; run++)
+    if (cmp (*run, *tmp) < 0)
+      tmp = run;
+  if (tmp != b)
+    std::swap (*tmp, *b);
+  run = b + 1;
+  while (++run <= end)
+    {
+      tmp = run - 1;
+      while (cmp (*run, *tmp) < 0)
+        tmp--;
+      tmp++;
+      if (tmp != run)
+        {
+          I x1 = tmp;
+          I x2 = run;
+          typename I::value_type v2 = *x2;
+          for (I x = x2; x > x1; x--)
+            *x = *(x - 1);
+          *x1 = v2;
+        }
+    }
 
 }
 
