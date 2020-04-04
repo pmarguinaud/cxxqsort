@@ -8,12 +8,9 @@
 
 
 
-template <typename V, typename C>
-void my_quicksort2 (V b, V e, C cmp)
+template <typename I, typename C>
+void my_quicksort2 (I b, I e, C cmp)
 {
-  using itt = V;
-  
-
   class stack_t
   {
   public:
@@ -21,13 +18,13 @@ void my_quicksort2 (V b, V e, C cmp)
     {
       top = &arr[0];
     }
-    void push (itt lo, itt hi)
+    void push (I lo, I hi)
     {
       top->lo = lo; 
       top->hi = hi; 
       top++;
     }
-    void pop (itt & lo, itt & hi)
+    void pop (I & lo, I & hi)
     {
       top--;
       lo = top->lo;
@@ -44,8 +41,8 @@ void my_quicksort2 (V b, V e, C cmp)
   private:
     struct node_t
     {
-      itt lo;
-      itt hi;
+      I lo;
+      I hi;
     };
     node_t arr[64];
     node_t * top;
@@ -62,14 +59,14 @@ void my_quicksort2 (V b, V e, C cmp)
 
       stack_t stack;
 
-      itt lo = b;
-      itt hi = e - 1;
+      I lo = b;
+      I hi = e - 1;
       stack.push (e, e);
       while (stack.size ())
         {
-          itt le;
-          itt ri;
-          itt mid = lo + (hi - lo) / 2;
+          I le;
+          I ri;
+          I mid = lo + (hi - lo) / 2;
           if (cmp (*mid, *lo) < 0)
             std::swap (*mid, *lo);
           if (cmp (*hi, *mid) < 0)
@@ -127,10 +124,10 @@ void my_quicksort2 (V b, V e, C cmp)
         }
     }
   {
-    itt end = e - 1;
-    itt tmp = b;
-    itt thr = std::min (end, b + max);
-    itt run;
+    I end = e - 1;
+    I tmp = b;
+    I thr = std::min (end, b + max);
+    I run;
     for (run = tmp + 1; run <= thr; run++)
       if (cmp (*run, *tmp) < 0)
         tmp = run;
@@ -145,10 +142,10 @@ void my_quicksort2 (V b, V e, C cmp)
         tmp++;
         if (tmp != run)
           {
-            itt x1 = tmp;
-            itt x2 = run;
-            typename V::value_type v2 = *x2;
-            for (itt x = x2; x > x1; x--)
+            I x1 = tmp;
+            I x2 = run;
+            typename I::value_type v2 = *x2;
+            for (I x = x2; x > x1; x--)
               *x = *(x - 1);
             *x1 = v2;
           }
