@@ -31,41 +31,37 @@ void my_quicksort2 (I b, I e, C cmp)
 
   if (e - b > max)
     {
-
       stack_t stack;
 
-      I lo = b;
-      I hi = e - 1;
+      I lo = b, hi = e - 1;
       stack.push (e, e);
       while (stack.size ())
         {
-          I le;
-          I ri;
-          I mid = lo + (hi - lo) / 2;
-          if (cmp (*mid, *lo) < 0)
-            std::swap (*mid, *lo);
-          if (cmp (*hi, *mid) < 0)
-            std::swap (*mid, *hi);
+          I le, ri, mi = lo + (hi - lo) / 2;
+          if (cmp (*mi, *lo) < 0)
+            std::swap (*mi, *lo);
+          if (cmp (*hi, *mi) < 0)
+            std::swap (*mi, *hi);
           else
             goto jump_over;
-          if (cmp (*mid, *lo) < 0)
-            std::swap (*mid, *lo);
+          if (cmp (*mi, *lo) < 0)
+            std::swap (*mi, *lo);
         jump_over:;
           le  = lo + 1;
           ri = hi - 1;
           do
             {
-              while (cmp (*le, *mid) < 0)
+              while (cmp (*le, *mi) < 0)
                 le++;
-              while (cmp (*mid, *ri) < 0)
+              while (cmp (*mi, *ri) < 0)
                 ri--;
               if (le < ri)
                 {
                   std::swap (*le, *ri);
-                  if (mid == le)
-                    mid = ri;
-                  else if (mid == ri)
-                    mid = le;
+                  if (mi == le)
+                    mi = ri;
+                  else if (mi == ri)
+                    mi = le;
                   le++;
                   ri--;
                 }
