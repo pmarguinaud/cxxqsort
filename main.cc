@@ -6,15 +6,6 @@
 #include <utility>
 
 
-void _swap (int * a, int * b, size_t size)
-{
-  std::swap (*a, *b);
-}
-
-//#define SWAP(a, b, size) _swap (a, b, size)
-#define SWAP(a, b, size) std::swap (*a, *b)
-
-
 #define MAX_THRESH  4
 
 
@@ -86,17 +77,14 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
         {
           I * left_ptr;
           I * right_ptr;
-          I * mid = lo + ((hi - lo) >> 1);
+          I * mid = lo + (hi - lo) / 2;
           if (cmp (mid, lo) < 0)
-//          SWAP (mid, lo, size);
             std::swap (*mid, *lo);
           if (cmp (hi, mid) < 0)
-//          SWAP (mid, hi, size);
             std::swap (*mid, *hi);
           else
             goto jump_over;
           if (cmp (mid, lo) < 0)
-//          SWAP (mid, lo, size);
             std::swap (*mid, *lo);
         jump_over:;
           left_ptr  = lo + 1;
@@ -109,7 +97,6 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
                 right_ptr -= 1;
               if (left_ptr < right_ptr)
                 {
-//                SWAP (left_ptr, right_ptr, size);
                   std::swap (*left_ptr, *right_ptr);
                   if (mid == left_ptr)
                     mid = right_ptr;
