@@ -8,10 +8,11 @@
 
 
 
-template <typename T, typename C>
-void my_quicksort2 (std::vector<T> & ord, C cmp)
+template <typename V, typename C>
+void my_quicksort2 (typename V::iterator & b, typename V::iterator & e, C cmp)
 {
-  using itt = typename std::vector<T>::iterator;
+  using itt = typename V::iterator;
+  
 
   class stack_t
   {
@@ -53,17 +54,17 @@ void my_quicksort2 (std::vector<T> & ord, C cmp)
 
   const int max = 4;
 
-  if (ord.size () == 0)
+  if (e - b == 0)
     return;
 
-  if (ord.size () > max)
+  if (e - b > max)
     {
 
       stack_t stack;
 
-      itt lo = ord.begin ();
-      itt hi = ord.end () - 1;
-      stack.push (ord.end (), ord.end ());
+      itt lo = b;
+      itt hi = e - 1;
+      stack.push (e, e);
       while (stack.size ())
         {
           itt le;
@@ -126,16 +127,16 @@ void my_quicksort2 (std::vector<T> & ord, C cmp)
         }
     }
   {
-    itt end = ord.end () - 1;
-    itt tmp = ord.begin ();
-    itt thr = std::min (end, ord.begin () + max);
+    itt end = e - 1;
+    itt tmp = b;
+    itt thr = std::min (end, b + max);
     itt run;
     for (run = tmp + 1; run <= thr; run++)
       if (cmp (*run, *tmp) < 0)
         tmp = run;
-    if (tmp != ord.begin ())
-      std::swap (*tmp, ord[0]);
-    run = ord.begin () + 1;
+    if (tmp != b)
+      std::swap (*tmp, *b);
+    run = b + 1;
     while (++run <= end)
       {
         tmp = run - 1;
@@ -146,7 +147,7 @@ void my_quicksort2 (std::vector<T> & ord, C cmp)
           {
             itt x1 = tmp;
             itt x2 = run;
-            T v2 = *x2;
+            typename V::value_type v2 = *x2;
             for (itt x = x2; x > x1; x--)
               *x = *(x - 1);
             *x1 = v2;
@@ -192,7 +193,13 @@ int main (int argc, char * argv[])
   std::vector<int> vec2 = vec1;
 
   my_quicksort1 (&vec1[0], n, sizeof (vec1[0]), compare);
-  my_quicksort2 (vec2, [&] (int a, int b) { return compare (&a, &b); });
+
+  std::vector<int>::iterator b2 = vec2.begin ();
+  std::vector<int>::iterator e2 = vec2.end ();
+
+  auto cmp = [&] (int a, int b) { return compare (&a, &b); };
+
+  my_quicksort2<std::vector<int>,decltype (cmp)> (b2, e2, cmp);
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
