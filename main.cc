@@ -137,23 +137,23 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
     I * const end = &ord[total_elems-1];
     I * tmp = &ord[0];
     I * thresh = std::min (end, &ord[0] + MAX_THRESH);
-    I * run_ptr;
-    for (run_ptr = tmp + 1; run_ptr <= thresh; run_ptr++)
-      if (cmp (run_ptr, tmp) < 0)
-        tmp = run_ptr;
+    I * run;
+    for (run = tmp + 1; run <= thresh; run++)
+      if (cmp (run, tmp) < 0)
+        tmp = run;
     if (tmp != &ord[0])
       std::swap (*tmp, ord[0]);
-    run_ptr = &ord[0] + 1;
-    while ((run_ptr += 1) <= end)
+    run = &ord[0] + 1;
+    while (++run <= end)
       {
-        tmp = run_ptr - 1;
-        while (cmp (run_ptr, tmp) < 0)
+        tmp = run - 1;
+        while (cmp (run, tmp) < 0)
           tmp--;
         tmp++;
-        if (tmp != run_ptr)
+        if (tmp != run)
           {
             I * x1 = tmp;
-            I * x2 = run_ptr;
+            I * x2 = run;
             I v2 = *x2;
             for (I * x = x2; x > x1; x--)
               *x = *(x - 1);
