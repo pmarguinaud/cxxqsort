@@ -47,10 +47,10 @@ private:
   node_t * top;
 };
 
-template <typename I, typename C>
-void my_quicksort2 (std::vector<I> & ord, C cmp)
+template <typename T, typename C>
+void my_quicksort2 (std::vector<T> & ord, C cmp)
 {
-  using itt = typename std::vector<I>::iterator;
+  using itt = typename std::vector<T>::iterator;
 
   const int max = 4;
 
@@ -60,7 +60,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp)
   if (ord.size () > max)
     {
 
-      stack_t<I> stack;
+      stack_t<T> stack;
 
       itt lo = ord.begin ();
       itt hi = ord.end () - 1;
@@ -147,7 +147,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp)
           {
             itt x1 = tmp;
             itt x2 = run;
-            I v2 = *x2;
+            T v2 = *x2;
             for (itt x = x2; x > x1; x--)
               *x = *(x - 1);
             *x1 = v2;
