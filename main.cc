@@ -20,19 +20,13 @@
 #define MAX_THRESH  4
 
 
-struct stack_node
-{
-  char *lo;
-  char *hi;
-};
-
 template <size_t N>
 class stack_t
 {
 public:
   stack_t () 
   {
-    top = &stack[0];
+    top = &arr[0];
   }
   void push (char * lo, char * hi)
   {
@@ -48,15 +42,20 @@ public:
   }
   bool empty () const
   {
-    return stack >= top;
+    return arr >= top;
   }
   size_t size () const
   {
-    return top - &stack[0];
+    return top - &arr[0];
   }
 private:
-  stack_node stack[N];
-  stack_node * top;
+  struct node_t
+  {
+    char * lo;
+    char * hi;
+  };
+  node_t arr[N];
+  node_t * top;
 };
 
 template <typename I, typename C>
@@ -80,12 +79,12 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
   if (ord.size () > MAX_THRESH)
     {
 
-      stack_t<8 * sizeof (size_t)> stack1;
+      stack_t<8 * sizeof (size_t)> stack;
 
       char *lo = base_ptr;
       char *hi = &lo[size * (total_elems - 1)];
-      stack1.push (nullptr, nullptr);
-      while (stack1.size ())
+      stack.push (nullptr, nullptr);
+      while (stack.size ())
         {
           char *left_ptr;
           char *right_ptr;
@@ -128,7 +127,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
           if ((size_t) (right_ptr - lo) <= max_thresh)
             {
               if ((size_t) (hi - left_ptr) <= max_thresh)
-                stack1.pop (lo, hi);
+                stack.pop (lo, hi);
               else
                 lo = left_ptr;
             }
@@ -136,12 +135,12 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
             hi = right_ptr;
           else if ((right_ptr - lo) > (hi - left_ptr))
             {
-              stack1.push (lo, right_ptr);
+              stack.push (lo, right_ptr);
               lo = left_ptr;
             }
           else
             {
-              stack1.push (left_ptr, hi);
+              stack.push (left_ptr, hi);
               hi = right_ptr;
             }
         }
