@@ -160,7 +160,8 @@ void my_quicksort2 (std::vector<I> & ord, C cmp_)
               {
                 char c = *trav;
                 char *hi, *lo;
-                for (hi = lo = trav; (lo -= size) >= tmp_ptr; hi = lo)
+                hi = lo = trav;
+                for (; (lo -= size) >= tmp_ptr; hi = lo)
                   *hi = *lo;
                 *hi = c;
               }
