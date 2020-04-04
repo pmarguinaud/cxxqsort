@@ -8,7 +8,7 @@
 
 
 
-template <size_t N, typename T>
+template <typename T>
 class stack_t
 {
 public:
@@ -43,7 +43,7 @@ private:
     itt lo;
     itt hi;
   };
-  node_t arr[N];
+  node_t arr[64];
   node_t * top;
 };
 
@@ -60,7 +60,7 @@ void my_quicksort2 (std::vector<I> & ord, C cmp)
   if (ord.size () > max)
     {
 
-      stack_t<8 * sizeof (size_t), I> stack;
+      stack_t<I> stack;
 
       itt lo = ord.begin ();
       itt hi = ord.end () - 1;
