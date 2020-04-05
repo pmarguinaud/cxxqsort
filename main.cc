@@ -1,133 +1,13 @@
 
+
+#include "quicksort.h"
+
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 #include <utility>
-
-
-
-
-template <typename I, typename C>
-void my_quicksort2 (I b, I e, C cmp)
-{
-  class stack_t
-  {
-  public:
-    stack_t () { top = &arr[0]; }
-    void push (I lo, I hi) { top->lo = lo; top->hi = hi; top++; }
-    void pop (I & lo, I & hi) { top--; lo = top->lo; hi = top->hi; }
-    size_t size () const { return top - &arr[0]; }
-  private:
-    struct node_t { I lo; I hi; };
-    node_t arr[64];
-    node_t * top;
-  };
-
-  const int max = 4;
-
-  if (e - b == 0)
-    return;
-
-  if (e - b > max)
-    {
-      stack_t stack;
-
-      I lo = b, hi = e - 1;
-      stack.push (e, e);
-
-      while (stack.size ())
-        {
-          I le, ri, mi = lo + (hi - lo) / 2;
-
-          if (cmp (*mi, *lo))
-            std::swap (*mi, *lo);
-          if (cmp (*hi, *mi))
-            std::swap (*mi, *hi);
-          else
-            goto jump_over;
-
-          if (cmp (*mi, *lo))
-            std::swap (*mi, *lo);
-
-jump_over:
-          le = lo + 1;
-          ri = hi - 1;
-
-          do
-            {
-              while (cmp (*le, *mi)) le++;
-              while (cmp (*mi, *ri)) ri--;
-              if (le < ri)
-                {
-                  std::swap (*le, *ri);
-                  if (mi == le)
-                    mi = ri;
-                  else if (mi == ri)
-                    mi = le;
-                  le++;
-                  ri--;
-                }
-              else if (le == ri)
-                {
-                  le++;
-                  ri--;
-                  break;
-                }
-            }
-          while (le <= ri);
-
-          if ((ri - lo) <= max)
-            {
-              if ((hi - le) <= max)
-                stack.pop (lo, hi);
-              else
-                lo = le;
-            }
-          else if ((hi - le) <= max)
-            {
-              hi = ri;
-            }
-          else if ((ri - lo) > (hi - le))
-            {
-              stack.push (lo, ri);
-              lo = le;
-            }
-          else
-            {
-              stack.push (le, hi);
-              hi = ri;
-            }
-        }
-    }
-
-  I end = e - 1, tmp = b, thr = std::min (end, b + max), run;
-  for (run = tmp + 1; run <= thr; run++)
-    if (cmp (*run, *tmp))
-      tmp = run;
-  if (tmp != b)
-    std::swap (*tmp, *b);
-  run = b + 1;
-  while (++run <= end)
-    {
-      tmp = run - 1;
-      while (cmp (*run, *tmp))
-        tmp--;
-      tmp++;
-      if (tmp != run)
-        {
-          I x1 = tmp, x2 = run;
-          typename I::value_type v2 = *x2;
-          for (I x = x2; x > x1; x--)
-            *x = *(x - 1);
-          *x1 = v2;
-        }
-    }
-
-}
-
-
-
+#include <sys/time.h>
 
 extern "C" void my_quicksort1 (void * const, size_t, size_t, int (*)(const void *, const void *));
 
@@ -147,6 +27,17 @@ static void pr (const std::vector<int> & vec, const char * file)
   fclose (fp);
 }
 
+
+double ctime ()
+{
+  struct timeval tv; 
+  struct timezone tz;
+
+  gettimeofday (&tv, &tz);
+
+  return double (tv.tv_sec) + double (tv.tv_usec) * 1e-6;
+}
+
 int main (int argc, char * argv[])
 {
 
@@ -161,17 +52,23 @@ int main (int argc, char * argv[])
 
   std::vector<int> vec2 = vec1;
 
-  my_quicksort1 (&vec1[0], n, sizeof (vec1[0]), compare);
 
-  std::vector<int>::iterator b2 = vec2.begin ();
-  std::vector<int>::iterator e2 = vec2.end ();
+  double t1a = ctime ();
+  my_quicksort1 (&vec1[0], n, sizeof (vec1[0]), compare);
+  double t1b = ctime ();
 
   auto cmp = [] (int a, int b) { return a < b; };
 
-  my_quicksort2 (vec2.begin (), vec2.end (), cmp);
+  double t2a = ctime ();
+  quicksort (vec2.begin (), vec2.end (), cmp);
+  double t2b = ctime ();
 
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
+
+  printf (" t1 = %12.4lf\n", t1b-t1a);
+  printf (" t2 = %12.4lf\n", t2b-t2a);
+
 
   return 0;
 }
