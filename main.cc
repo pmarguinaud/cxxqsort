@@ -51,6 +51,7 @@ int main (int argc, char * argv[])
     vec1[i] = rand () % n;
 
   std::vector<int> vec2 = vec1;
+  std::vector<int> vec3 = vec1;
 
 
   double t1a = ctime ();
@@ -63,11 +64,16 @@ int main (int argc, char * argv[])
   quicksort (vec2.begin (), vec2.end (), cmp);
   double t2b = ctime ();
 
+  double t3a = ctime ();
+  std::sort (vec3.begin (), vec3.end (), cmp);
+  double t3b = ctime ();
+
   pr (vec1, "vec1.txt");
   pr (vec2, "vec2.txt");
 
   printf (" t1 = %12.4lf\n", t1b-t1a);
   printf (" t2 = %12.4lf\n", t2b-t2a);
+  printf (" t3 = %12.4lf\n", t3b-t3a);
 
 
   return 0;
